@@ -62,15 +62,15 @@ function getWeatherData(xhttp) {
         }
     });
 }
-  $.getJSON('https://ipinfo.io/geo', function (response) {
+  /*$.getJSON('https://ipinfo.io/geo', function (response) {
             var loc = response.loc.split(',');
             var coords = {
                 latitude: loc[0],
                 longitude: loc[1]
             };
             useLatLongForWeather(coords);
-        });
-/*navigator.geolocation.getCurrentPosition(function (position) {
+        });*/
+navigator.geolocation.getCurrentPosition(function (position) {
     useLatLongForWeather(position.coords);
 },
     function (failure) {
@@ -83,4 +83,4 @@ function getWeatherData(xhttp) {
             useLatLongForWeather(coords);
         });
     }
-);*/// JavaScript source code
+);// JavaScript source code
