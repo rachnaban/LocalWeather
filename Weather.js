@@ -1,67 +1,102 @@
-function useLatLongForWeather(coords) {
-    var lat = coords.latitude;
-    var lon = coords.longitude;
-    var apiKey = "66e767d7b43aea4be8d8ebf4ec634715";
-    var apiUrl = "https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?lat=" + coords.latitude + "&lon=" + coords.longitude + "&appid=66e767d7b43aea4be8d8ebf4ec634715";
-    callWeatherApi(apiUrl, getWeatherData);
-}
-function callWeatherApi(url, cFunction) {
-    var xhttp;
-    xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            cFunction(this);
-        }
-    };
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
+function initialize() {
 
-function getWeatherData(xhttp) {
-    var obj = JSON.parse(xhttp.responseText);
-    var weatherDescription = obj.weather[0].description;
+    const input = document.getElementById('address');
+    let $details = document.getElementById('details'),
+        $weathericon = document.getElementById('pic'),
+        $address = document.getElementById('address'),
+        $city = document.getElementById('city'),
+        $country = document.getElementById('country'),
+        $currenttemperature = document.getElementById('current-temperature'),
+        $mintemperature = document.getElementById('min-temperature'),
+        $maxtemperature = document.getElementById('max-temperature'),
+        $clouds = document.getElementById('clouds'),
+        $pressure = document.getElementById('pressure'),
+        $wind = document.getElementById('wind'),
+        $description = document.getElementById('description'),
+        $icon = document.getElementById('icon'),
+        $lblUnit = document.getElementById('unit'),
+      
+         gTempMinCel,
+         gTempMinFeh,
+         gTempMaxCel,
+         gTempMaxFeh,
+         gTempCurCel,
+         gTempCurFeh;
+            $lblUnit.addEventListener('click', changeunit);
 
-    var iconUrl = "http://openweathermap.org/img/w/" + obj.weather[0].icon + ".png";
+    if (!input) return;
 
-    var $img = $("<img src=" + iconUrl + "></img>");
-    var $span = $("<div><span id='condition'></span></div>");
-    var $currentTemp = $("<div><span id='curTemp'></span></div>");
-    var $maxMinTemp = $("<div id='minMaxDiv'> <span id='minTemp'></span> to <span id='maxTemp'></span></div>");
-    var $otherDetails = $("<div>Wind <span id='windspeed'></span> Clouds <span id='clouds'></span> Atmospheric Pressure <span id='pressure'></span></div>");
-    $("#icon").append($span).append($img).append($currentTemp).append($maxMinTemp).append($otherDetails);
+    const dropdown = new google.maps.places.Autocomplete(input);
 
-    var tempInCel = obj.main.temp - 273;
-    var minTempInCel = obj.main.temp_min - 273;
-    var maxTempInCel = obj.main.temp_max - 273;
-    document.getElementById("curTemp").innerHTML = tempInCel.toFixed(1) + '&deg;C';
-    document.getElementById("minTemp").innerHTML = minTempInCel.toFixed(1) + '&deg;C';
-    document.getElementById("maxTemp").innerHTML = maxTempInCel.toFixed(1) + '&deg;C';
-    var minTempInF = minTempInCel * (9 / 5) + 32;
-    var maxTempInF = maxTempInCel * (9 / 5) + 32;
-    var tempInF = tempInCel * (9 / 5) + 32;
-    document.getElementById("country").innerHTML = obj.sys.country;
-    document.getElementById("city").innerHTML = obj.name;
-    document.getElementById("condition").innerHTML = weatherDescription;
+    dropdown.addListener('place_changed', () => {
+        
+        const place = dropdown.getPlace();
 
-    document.getElementById("clouds").innerHTML = obj.clouds.all + "%";
-    document.getElementById("windspeed").innerHTML = obj.wind.speed + " miles per hour";
-    document.getElementById("pressure").innerHTML = obj.main.pressure + " hPa";
+        if (place.geometry) {
+            const lat = place.geometry.location.lat(),
+                lng = place.geometry.location.lng(),
+                apiKey = "66e767d7b43aea4be8d8ebf4ec634715",
+                apiUrl = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=66e767d7b43aea4be8d8ebf4ec634715`;
 
+            fetch(apiUrl)
+                .then(blob => blob.json())
+                .then(data => {
+                    const  [weatherDescription, iconUrl,tempInCel,minTempInCel,maxTempInCel,country,city,cloud,windSpeed,atmosphericPressure,minTempInF,maxTempInF,tempInF] = getWeather(data);
+                    $details.classList.remove("hidden");
+                    gTempMinCel= minTempInCel;
+                    gTempMinFeh = minTempInF;
+                    gTempCurFeh = tempInF;
+                    gTempCurCel = tempInCel;
+                    gTempMaxFeh = maxTempInF;
+                    gTempMaxCel = maxTempInCel;
+                    
+    $details.classList.add("inline-grid");
+    $weathericon.style.border = '1px solid';
+    $address.value = "";
+    $lblUnit.classList.remove("hidden");
 
-    $('input[type="radio"]').change(function () {
-        if (this.id == "tempF") {
-            document.getElementById("curTemp").innerHTML = tempInF.toFixed(1) + '&deg;F';
-            document.getElementById("minTemp").innerHTML = minTempInF.toFixed(1) + '&deg;F';
-            document.getElementById("maxTemp").innerHTML = maxTempInF.toFixed(1) + '&deg;F';
-
-        }
-        else {
-            document.getElementById("curTemp").innerHTML = tempInCel.toFixed(1) + '&deg;C';
-            document.getElementById("minTemp").innerHTML = minTempInCel.toFixed(1) + '&deg;C';
-            document.getElementById("maxTemp").innerHTML = maxTempInCel.toFixed(1) + '&deg;C';
+    $city.innerHTML = city;
+    $country.innerHTML = country;
+    $currenttemperature.innerHTML = tempInCel.toFixed(1) + '&deg;C';
+    $mintemperature.innerHTML = minTempInCel.toFixed(1) + '&deg;C';
+    $maxtemperature.innerHTML = maxTempInCel.toFixed(1) + '&deg;C';
+    $clouds.innerHTML = cloud + " %";
+    $pressure.innerHTML = atmosphericPressure + " hPa";
+    $wind.innerHTML = windSpeed + " miles per hour";
+    $description.innerHTML = weatherDescription;
+    $icon.src = iconUrl;
+                    });
+        } else {
+            alert('Please select the name of the place from the suggestions!');
+            return;
         }
     });
+
+     function changeunit(e){
+    
+       if (this.innerText == "°C") {
+    
+            this.innerText = "°F";
+
+            $currenttemperature.innerHTML = gTempCurFeh.toFixed(1) + '&deg;F';
+            $mintemperature.innerHTML = gTempMinFeh.toFixed(1) + '&deg;F';
+            $maxtemperature.innerHTML = gTempMaxFeh.toFixed(1) + '&deg;F';
+        } else {
+    
+            this.innerText = "°C";
+            $currenttemperature.innerHTML =gTempCurCel.toFixed(1) + '&deg;C';
+            $mintemperature.innerHTML = gTempMinCel.toFixed(1) + '&deg;C';
+            $maxtemperature.innerHTML = gTempMaxCel.toFixed(1) + '&deg;C';
+        }
+    };
+    // if someone hits enter on the address field, don't submit the form
+
+    input.addEventListener('keydown', (e) => {
+
+        if (e.keyCode === 13) e.preventDefault();
+    });
 }
+<<<<<<< HEAD
   /*$.getJSON('https://ipinfo.io/geo', function (response) {
             var loc = response.loc.split(',');
             var coords = {
@@ -84,3 +119,27 @@ navigator.geolocation.getCurrentPosition(function (position) {
         });
     }
 );// JavaScript source code
+=======
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+function getWeather(weatherData) {
+    
+       let weatherDescription = weatherData.weather[0].description,
+        iconUrl = "http://openweathermap.org/img/w/" + weatherData.weather[0].icon + ".png",
+        tempInCel = weatherData.main.temp - 273,
+        minTempInCel = weatherData.main.temp_min - 273,
+        maxTempInCel = weatherData.main.temp_max - 273,
+        country = weatherData.sys.country,
+        city = weatherData.name,
+        cloud = weatherData.clouds.all,
+        windSpeed = weatherData.wind.speed, //miles per hour
+        atmosphericPressure = weatherData.main.pressure,
+        minTempInF = minTempInCel * (9 / 5) + 32,
+        maxTempInF = maxTempInCel * (9 / 5) + 32,
+        tempInF = tempInCel * (9 / 5) + 32;
+        return [weatherDescription, iconUrl,tempInCel,minTempInCel,maxTempInCel,country,city,cloud,windSpeed,atmosphericPressure,minTempInF,maxTempInF,tempInF];
+      }
+
+    
+>>>>>>> refs/remotes/origin/master
