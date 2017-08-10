@@ -63,7 +63,7 @@ label {
 }
 .inline-grid {
     display: inline-grid;
-    width: 100;
+    width: 100%;
 }
 input {
     padding: 5px;
