@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>What is the weather?</title>
+   <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+   <link rel="stylesheet" href="weather.css"/>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9ycobB5RiavbXpJBo0Muz2komaqqvGv0&libraries=places"></script>
+   <script type="text/javascript" src="weather.js"></script>
+</head>
+<body>
+
+    <div id='wrapper'>    
+    <div class='container'>
+       <input type='text' id='address' placeholder="Enter City or Country">
+       <div class="changeunit">
+             <label name='unit' id='unit' class='hidden'>°C</label>
+       </div>
+        <div class='weather'>
+      <div class='weather-items' id='pic'>
+           <img id='icon' />
+           <span id='description'></span>
+      </div>
+      <div class='weather-items'>
+      <span id='city' readonly="true"></span>
+      <span id='country' readonly="true"></span>
+       </div>
+      </div>
+        <div id='details' class='hidden'>
+        
+       
+        <div class='weather'>
+        <label for='current-temperature' >Current Temperature</label>
+        <span id='current-temperature'></span></div>
+        <div class='weather'>
+         <label for='min-temperature' >Minimum Temperature</label>
+        <span id='min-temperature'></span></div>
+         <div class='weather'><label for='max-temperature' >Maximum Temperature</label>
+        <span id='max-temperature' ></span></div>
+             
+ <div class='weather'><label for='clouds' >Clouds</label>
+        <span id='clouds'></span></div>
+         <div class='weather'><label for='wind'>Wind</label>
+       <span id='wind' ></span></div>
+         <div class='weather'><label for='pressure' >Atmospheric Pressure</label>
+        <span id='pressure'></span></div>
+        </div>
+    </div>
+<footer>Designed and Coded with ♥ by <a href='https://www.freecodecamp.com/rachnaban' target='_blank'>Rachna</a></footer>
+    </div>
+</body>
+</html>

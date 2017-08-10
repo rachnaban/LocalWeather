@@ -1,35 +1,123 @@
-﻿       body{
-    background-image:url('https://image.freepik.com/free-photo/fresh-grass-with-sky-background_1149-1042.jpg');
-    background-attachment:fixed;
-    background-repeat: no-repeat;   
-    background-size: cover;
-   
+﻿body {
+    background-color: #f39c12;
+    font-family: 'Abel';
+    font-size: 16px;
 }
-.maindiv {
-margin-top:100px;
+.weather {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: center;
 }
-        #icon {
-           
-            background-color:darkgoldenrod;
-            border-radius:20px;
-        }
-        #condition,#curTemp ,#minMaxDiv{
-            padding:5px;
-        }
-        .weather {
-            margin-top: 50px;
-        }
-        
-        html, body, .container {
-    height: 100%;
+.weather label {
+    flex: 2;
+}
+.changeunit {
+    position: absolute;
+    right: 12px;
+}
+footer {
+    text-align: center;
+    font-size: 16px;
+}
+#description {
+    text-align: center;
+    position: absolute;
+    bottom: 20px;
+    font-size: 12px;
+    margin-bottom: -5px;
+}
+#city,
+#country {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#pic {
+    min-width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    align-self: center;
+    max-height: 100px;
+    max-width: 100px;
+    border: 1px solid transparent;
+    position: relative;
+}
+label {
+    font-weight: bold;
+}
+.weather-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+* {
+    box-sizing: border-box;
+    line-height: 28px;
+}
+.hidden {
+    display: none;
+}
+.inline-grid {
+    display: inline-grid;
+    width: 100;
+}
+input {
+    padding: 5px;
+    outline: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #f39c12;
+    color: #fff;
+    font-family: 'Abel';
+    font-size: 22px;
+}
+#unit {
+    cursor: pointer;
+}
+#wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    background-color: #fff;
+    height: auto;
+    color: #f39c12;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .container {
-    display: table;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
-
-        #icon img {
-            margin:auto;
-            width:50px;
-            height:50px;
-        }
+::-webkit-input-placeholder {
+    color: #fff;
+}
+:-moz-placeholder {
+    color: #fff;
+    opacity: 1;
+}
+::-moz-placeholder {
+    color: #fff;
+    opacity: 1;
+}
+:-ms-input-placeholder {
+    color: #fff;
+}
+::-ms-input-placeholder {
+    color: #fff;
+}
+a {
+    text-decoration: none;
+    color: rgb(0, 255, 0);
+}
+@media screen and (max-width: 550px) {
+    #wrapper {
+        width: 100%;
+    }
+}
