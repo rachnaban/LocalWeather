@@ -36,7 +36,7 @@ function initialize() {
             const lat = place.geometry.location.lat(),
                 lng = place.geometry.location.lng(),
                 apiKey = "66e767d7b43aea4be8d8ebf4ec634715",
-                apiUrl = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=66e767d7b43aea4be8d8ebf4ec634715`;
+                apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=66e767d7b43aea4be8d8ebf4ec634715`;
 
             fetch(apiUrl)
                 .then(blob => blob.json())
